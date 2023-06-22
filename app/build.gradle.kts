@@ -67,7 +67,7 @@ dependencies {
     implementation("androidx.fragment:fragment-ktx:1.6.0")
 
     // Compose
-    implementation(platform("androidx.compose:compose-bom:2023.03.00"))
+    implementation(platform("androidx.compose:compose-bom:2023.05.01"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
@@ -87,6 +87,10 @@ dependencies {
     implementation("androidx.media3:media3-exoplayer:$media3_version")
     implementation("androidx.media3:media3-ui:$media3_version")
     implementation("androidx.media3:media3-exoplayer-dash:$media3_version")
+
+    //Adding this to fix the error: Targeting S+ (version 31 and above) requires
+    // that one of FLAG_IMMUTABLE or FLAG_MUTABLE be specified when creating a PendingIntent.
+    implementation("androidx.work:work-runtime-ktx:2.8.1")
 
     // Testing libraries
     testImplementation("junit:junit:4.13.2")
