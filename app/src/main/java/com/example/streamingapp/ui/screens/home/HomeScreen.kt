@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Text
@@ -14,8 +15,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
@@ -53,19 +57,32 @@ private fun MediaPlayer(modifier: Modifier = Modifier, mediaUri: String) {
         getMediaPlayer(localContext, mediaUri)
     }
 
-    DisposableEffect(AndroidView(
+    val lifecycle = LocalLifecycleOwner.current.lifecycle
+    DisposableEffect(key1 = Unit) {
+        val lifecycleObserver = object : DefaultLifecycleObserver {
+            override fun onStop(owner: LifecycleOwner) {
+                mediaPlayer.stop()
+            }
+        }
+
+        lifecycle.addObserver(lifecycleObserver)
+        onDispose {
+            lifecycle.removeObserver(lifecycleObserver)
+            mediaPlayer.release()
+        }
+    }
+
+    AndroidView(
         modifier = modifier
             .fillMaxWidth()
-            .wrapContentSize(),
+            .wrapContentSize()
+            .heightIn(max = 300.dp),
         factory = { context ->
             PlayerView(context)
         },
         update = { playerView ->
             playerView.player = mediaPlayer
-        }
-    )) {
-        onDispose { mediaPlayer.release() }
-    }
+        })
 }
 
 private fun getMediaPlayer(context: Context, mediaUri: String): ExoPlayer {
