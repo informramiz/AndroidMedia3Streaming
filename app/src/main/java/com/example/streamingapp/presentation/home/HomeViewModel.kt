@@ -8,10 +8,17 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val mediaRepository: MediaRepository
-) : BaseViewModel<HomeViewState>(){
-    override fun initialViewState() = HomeViewState(null)
+) : BaseViewModel<HomeViewState>() {
+    override fun initialViewState() = HomeViewState(emptyList())
 
     init {
-        updateViewState { it.copy(medialUrl = mediaRepository.getMp4VideoUrl()) }
+        updateViewState {
+            it.copy(
+                medialUrls = listOf(
+                    mediaRepository.getMp4VideoUrl(),
+                    mediaRepository.getMp3AudioUrl()
+                )
+            )
+        }
     }
 }

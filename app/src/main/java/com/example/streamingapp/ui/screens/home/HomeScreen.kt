@@ -43,18 +43,16 @@ private fun HomeScreenContent(viewState: HomeViewState) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Text(text = "Hello World")
-        if (viewState.medialUrl != null) {
-            MediaPlayer(mediaUri = viewState.medialUrl)
-        }
+        Text(text = "Playing Video Using a Web Link")
+        MediaPlayer(mediaUris = viewState.medialUrls)
     }
 }
 
 @Composable
-private fun MediaPlayer(modifier: Modifier = Modifier, mediaUri: String) {
+private fun MediaPlayer(modifier: Modifier = Modifier, mediaUris: List<String>) {
     val localContext = LocalContext.current
     val mediaPlayer = remember {
-        getMediaPlayer(localContext, mediaUri)
+        getMediaPlayer(localContext, mediaUris)
     }
 
     val lifecycle = LocalLifecycleOwner.current.lifecycle
@@ -85,12 +83,12 @@ private fun MediaPlayer(modifier: Modifier = Modifier, mediaUri: String) {
         })
 }
 
-private fun getMediaPlayer(context: Context, mediaUri: String): ExoPlayer {
+private fun getMediaPlayer(context: Context, mediaUris: List<String>): ExoPlayer {
     return ExoPlayer.Builder(context)
         .build()
         .apply {
-            val mediaItem = MediaItem.fromUri(mediaUri)
-            setMediaItem(mediaItem)
+            val mediaItems = mediaUris.map { MediaItem.fromUri(it) }
+            setMediaItems(mediaItems)
             prepare()
         }
 }
