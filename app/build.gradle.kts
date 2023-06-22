@@ -73,13 +73,19 @@ dependencies {
     implementation("androidx.compose.material3:material3")
 
     // Hilt
-    val dagger_group_hilt_version = 2.44
+    val dagger_group_hilt_version = "2.44"
     implementation("com.google.dagger:hilt-android:$dagger_group_hilt_version")
     kapt("com.google.dagger:hilt-compiler:$dagger_group_hilt_version")
     val hilt_version = "1.0.0"
     implementation("androidx.hilt:hilt-work:$hilt_version")
     kapt("androidx.hilt:hilt-compiler:$hilt_version")
     implementation("androidx.hilt:hilt-navigation-compose:$hilt_version")
+
+    // Media3
+    val media3_version = "1.1.0-rc01"
+    implementation("androidx.media3:media3-exoplayer:$media3_version")
+    implementation("androidx.media3:media3-ui:$media3_version")
+    implementation("androidx.media3:media3-exoplayer-dash:$media3_version")
 
     // Testing libraries
     testImplementation("junit:junit:4.13.2")
